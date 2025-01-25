@@ -1,0 +1,150 @@
+--[[
+Nekos GUI V1
+Script with textboxes for Speed and JumpPower, a button to give a TP tool, and a silent aim/aimbot button.
+GUI is draggable.
+]]
+
+-- Create GUI
+local ScreenGui = Instance.new("ScreenGui")
+local Frame = Instance.new("Frame")
+local SpeedLabel = Instance.new("TextLabel")
+local SpeedInput = Instance.new("TextBox")
+local JumpLabel = Instance.new("TextLabel")
+local JumpInput = Instance.new("TextBox")
+local GiveTPTool = Instance.new("TextButton")
+local AimbotButton = Instance.new("TextButton")
+local FooterLabel = Instance.new("TextLabel")
+
+-- Parent GUI
+ScreenGui.Name = "NekosGUIV1"
+ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+Frame.Parent = ScreenGui
+Frame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+Frame.BorderColor3 = Color3.fromRGB(255, 255, 255)
+Frame.Size = UDim2.new(0, 300, 0, 400)
+Frame.Position = UDim2.new(0.5, -150, 0.5, -200)
+Frame.Active = true
+Frame.Draggable = true
+
+-- Speed Label and Input
+SpeedLabel.Parent = Frame
+SpeedLabel.Text = "Speed:"
+SpeedLabel.Size = UDim2.new(0, 100, 0, 50)
+SpeedLabel.Position = UDim2.new(0, 10, 0, 10)
+SpeedLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+SpeedLabel.TextColor3 = Color3.fromRGB(0, 0, 0)
+
+SpeedInput.Parent = Frame
+SpeedInput.PlaceholderText = "Enter Speed"
+SpeedInput.Size = UDim2.new(0, 180, 0, 50)
+SpeedInput.Position = UDim2.new(0, 110, 0, 10)
+SpeedInput.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+SpeedInput.TextColor3 = Color3.fromRGB(0, 0, 0)
+
+-- Jump Label and Input
+JumpLabel.Parent = Frame
+JumpLabel.Text = "JumpPower:"
+JumpLabel.Size = UDim2.new(0, 100, 0, 50)
+JumpLabel.Position = UDim2.new(0, 10, 0, 70)
+JumpLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+JumpLabel.TextColor3 = Color3.fromRGB(0, 0, 0)
+
+JumpInput.Parent = Frame
+JumpInput.PlaceholderText = "Enter JumpPower"
+JumpInput.Size = UDim2.new(0, 180, 0, 50)
+JumpInput.Position = UDim2.new(0, 110, 0, 70)
+JumpInput.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+JumpInput.TextColor3 = Color3.fromRGB(0, 0, 0)
+
+-- Give TP Tool Button
+GiveTPTool.Parent = Frame
+GiveTPTool.Text = "Give Teleport Tool"
+GiveTPTool.Size = UDim2.new(0, 280, 0, 50)
+GiveTPTool.Position = UDim2.new(0, 10, 0, 130)
+GiveTPTool.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+GiveTPTool.TextColor3 = Color3.fromRGB(0, 0, 0)
+
+-- Aimbot Button
+AimbotButton.Parent = Frame
+AimbotButton.Text = "Toggle Aimbot"
+AimbotButton.Size = UDim2.new(0, 280, 0, 50)
+AimbotButton.Position = UDim2.new(0, 10, 0, 190)
+AimbotButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+AimbotButton.TextColor3 = Color3.fromRGB(0, 0, 0)
+
+-- Footer Label
+FooterLabel.Parent = Frame
+FooterLabel.Text = "Nekos Universal GUI\nJoin the discord: https://discord.gg/C2HJhWF9kk"
+FooterLabel.Size = UDim2.new(0, 280, 0, 50)
+FooterLabel.Position = UDim2.new(0, 10, 0, 340)
+FooterLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+FooterLabel.TextColor3 = Color3.fromRGB(0, 0, 0)
+FooterLabel.TextWrapped = true
+
+-- Script Logic
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoid = character:WaitForChild("Humanoid")
+
+-- Apply Speed
+SpeedInput.FocusLost:Connect(function(enterPressed)
+    if enterPressed then
+        local speed = tonumber(SpeedInput.Text) or 16
+        humanoid.WalkSpeed = speed
+    end
+end)
+
+-- Apply JumpPower
+JumpInput.FocusLost:Connect(function(enterPressed)
+    if enterPressed then
+        local jumpPower = tonumber(JumpInput.Text) or 50
+        humanoid.JumpPower = jumpPower
+    end
+end)
+
+-- Give Teleport Tool Logic
+GiveTPTool.MouseButton1Click:Connect(function()
+    local tool = Instance.new("Tool")
+    tool.RequiresHandle = false
+    tool.Name = "Teleport Tool"
+    tool.Activated:Connect(function()
+        local mouse = player:GetMouse()
+        character:SetPrimaryPartCFrame(CFrame.new(mouse.Hit.p))
+    end)
+    tool.Parent = player.Backpack
+end)
+
+-- Aimbot Logic
+local aimbotEnabled = false
+AimbotButton.MouseButton1Click:Connect(function()
+    aimbotEnabled = not aimbotEnabled
+    if aimbotEnabled then
+        AimbotButton.Text = "Aimbot: ON"
+    else
+        AimbotButton.Text = "Aimbot: OFF"
+    end
+end)
+
+game:GetService("RunService").RenderStepped:Connect(function()
+    if aimbotEnabled then
+        local mouse = player:GetMouse()
+        local closestPlayer = nil
+        local shortestDistance = math.huge
+
+        for _, v in pairs(game.Players:GetPlayers()) do
+            if v ~= player and v.Character and v.Character:FindFirstChild("Humanoid") and v.Character.Humanoid.Health > 0 then
+                local pos = v.Character.PrimaryPart.Position
+                local distance = (mouse.Hit.p - pos).Magnitude
+
+                if distance < shortestDistance then
+                    shortestDistance = distance
+                    closestPlayer = v
+                end
+            end
+        end
+
+        if closestPlayer and closestPlayer.Character and closestPlayer.Character:FindFirstChild("PrimaryPart") then
+            mouse.Hit = CFrame.new(closestPlayer.Character.PrimaryPart.Position)
+        end
+    end
+end)
